@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix MP3 to MP4 Converter</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="matrix-overlay"></div>
+    <div class="container">
+        <h1 class="title">Matrix MP3 to MP4 Converter</h1>
+        
+        <div class="upload-panel">
+            <h2>Upload Files</h2>
+            <div class="upload-container">
+                <div class="upload-box" id="audioDropZone">
+                    <div class="upload-icon">🎵</div>
+                    <p>Drop MP3 Here</p>
+                    <span class="or-text">- or -</span>
+                    <button class="upload-btn">Choose MP3 File</button>
+                    <input type="file" id="audioInput" accept=".mp3" hidden>
+                    <p class="file-name" id="audioFileName"></p>
+                </div>
+
+                <div class="upload-box" id="imageDropZone">
+                    <div class="upload-icon">🖼️</div>
+                    <p>Drop Image Here</p>
+                    <span class="or-text">- or -</span>
+                    <button class="upload-btn">Choose Image File</button>
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                    <p class="file-name" id="imageFileName"></p>
+                </div>
+            </div>
+            
+            <button id="generateBtn" class="generate-btn" disabled>Generate Video</button>
+        </div>
+
+        <div class="history-panel">
+            <h2>History</h2>
+            <div class="job-list" id="jobList">
+                <!-- Jobs will be inserted here dynamically -->
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
