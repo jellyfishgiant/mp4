@@ -1,0 +1,18 @@
+services:
+  
+  # Node.js Server
+  server:
+    build:
+      context: .
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/video-converter
+    ports:
+      - 3000:3000
+    volumes:
+      - ./output:/usr/src/app/output
+  
+  # MongoDB
+  mongo:
+    image: mongo:5-focal
+    ports:
+      - 27017:27017
