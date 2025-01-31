@@ -27,3 +27,17 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: kristianwindsor/pat-mp4:b${{ github.run_number }}, kristianwindsor/pat-mp4:latest
+      
+      # Deploy to Kristian's Server
+      - name: Deploy to server
+        uses: steebchen/kubectl@v1.1.0
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: set image --record deployment/mp4-server node=kristianwindsor/pat-mp4:b${{ github.run_number }}
+      - name: Verify deployment
+        uses: steebchen/kubectl@v1.1.0
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: rollout status deployment/mp4-server
