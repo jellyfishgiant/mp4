@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mp4
+  annotations:
+    certmanager.k8s.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mp4.kwk8s.tech
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: mp4-server
+            port:
+              number: 3000
+  tls:
+  - hosts:
+    - mp4.kwk8s.tech
+    secretName: mp4-cert

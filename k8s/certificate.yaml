@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mp4-cert
+spec:
+  secretName: mp4-cert
+  commonName: mp4.kwk8s.tech
+  dnsNames:
+    - mp4.kwk8s.tech
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer

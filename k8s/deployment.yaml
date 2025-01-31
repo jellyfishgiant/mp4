@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mp4-server
+  labels:
+    app: mp4-server
+spec:
+  selector:
+    matchLabels:
+      app: mp4-server
+  template:
+    metadata:
+      labels:
+        app: mp4-server
+    spec:
+      containers:
+        - name: node
+          image: kristianwindsor/pat-mp4
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGODB_URI
+              value: "mongodb://mp4-mongo:27017/video-converter"

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mp4-server
+  labels:
+    app: mp4-server
+spec:
+  selector:
+    app: mp4-server
+  ports:
+    - port: 3000

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mp4-mongo
+spec:
+  serviceName: mp4-mongo
+  selector:
+    matchLabels:
+      app: mp4-mongo
+  template:
+    metadata:
+      labels:
+        app: mp4-mongo
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6-focal
+        ports:
+        - containerPort: 27017
