@@ -106,7 +106,7 @@ class VideoConverter {
             });
 
             const data = await response.json();
-            this.addJobToList(data.jobId, data.status, data.title, data.previewUrl);
+            this.addJobToList(data.jobId, data.status, data.title, data.previewUrl, data.outputFileName);
             this.resetUploadForm();
             this.startPolling(data.jobId);
         } catch (error) {
@@ -127,7 +127,7 @@ class VideoConverter {
         this.imageInput.value = '';
     }
 
-    addJobToList(jobId, status, title, previewUrl) {
+    addJobToList(jobId, status, title, previewUrl, outputFileName) {
         if (status === 'progress') {
             this.processingJobs.add(jobId);
         }
@@ -142,6 +142,7 @@ class VideoConverter {
             status,
             title,
             previewUrl,
+            outputFileName,
             timestamp: new Date().toISOString()
         };
         this.saveJobToStorage(jobData);
@@ -153,10 +154,26 @@ class VideoConverter {
                 </div>
                 <div class="job-details">
                     <span class="job-title">${title || 'Untitled'}</span>
-                    <span class="job-status status-${status}">${status === 'progress' ? 'Generating...' : status}</span>
+                    <div class="status-container">
+                        <span class="job-status status-${status}">${status === 'progress' ? 'Generating...' : status}</span>
+                        ${status === 'finished' ? 
+                            `<button class="download-btn" data-filename="${outputFileName}">
+                                Download
+                            </button>` : 
+                            ''}
+                    </div>
                 </div>
             </div>
         `;
+        
+        // Add click handler for download button
+        const downloadBtn = jobElement.querySelector('.download-btn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                const filename = downloadBtn.dataset.filename;
+                window.location.href = `/download/${encodeURIComponent(filename)}`;
+            });
+        }
         
         this.jobList.prepend(jobElement);
     }
@@ -205,7 +222,7 @@ class VideoConverter {
                 const serverJob = serverJobsMap.get(job.id);
                 const currentStatus = serverJob ? serverJob.status : job.status;
                 
-                this.addJobToList(job.id, currentStatus, job.title, job.previewUrl);
+                this.addJobToList(job.id, currentStatus, job.title, job.previewUrl, job.outputFileName);
                 
                 if (currentStatus === 'progress') {
                     this.startPolling(job.id);
@@ -235,9 +252,22 @@ class VideoConverter {
                 
                 const jobElement = document.getElementById(`job-${jobId}`);
                 if (jobElement) {
-                    const statusSpan = jobElement.querySelector('.job-status');
+                    const statusContainer = jobElement.querySelector('.status-container');
+                    const statusSpan = statusContainer.querySelector('.job-status');
                     statusSpan.className = `job-status status-${job.status}`;
                     statusSpan.textContent = job.status === 'progress' ? 'Generating...' : job.status;
+
+                    // Add download button when finished
+                    if (job.status === 'finished' && !statusContainer.querySelector('.download-btn')) {
+                        const downloadBtn = document.createElement('button');
+                        downloadBtn.className = 'download-btn';
+                        downloadBtn.textContent = 'Download';
+                        downloadBtn.dataset.filename = job.outputFileName;
+                        downloadBtn.addEventListener('click', () => {
+                            window.location.href = `/download/${encodeURIComponent(job.outputFileName)}`;
+                        });
+                        statusContainer.appendChild(downloadBtn);
+                    }
                 }
 
                 if (job.status === 'finished' || job.status === 'error') {

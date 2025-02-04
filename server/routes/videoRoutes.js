@@ -52,7 +52,11 @@ router.get('/jobs/:id', async (req, res) => {
         if (!job) {
             return res.status(404).json({ error: 'Job not found' });
         }
-        res.json(job);
+        res.json({
+            status: job.status,
+            title: job.title,
+            outputFileName: job.outputFileName
+        });
     } catch (error) {
         console.error('Error fetching job:', error);
         res.status(500).json({ error: error.message });
@@ -74,7 +78,7 @@ router.post('/convert', upload.fields([
         const timestamp = new Date().toISOString()
             .replace(/[:.]/g, '-')
             .replace('T', '_')
-            .slice(0, -5); // Remove milliseconds
+            .slice(0, -5);
         
         const outputFileName = `${mp3Name}_${timestamp}.mp4`;
         
@@ -102,12 +106,11 @@ router.post('/convert', upload.fields([
             previewPath
         );
 
-        console.log('Preview created at:', previewPath);
-
         res.json({ 
             jobId: job._id,
             status: 'progress',
             title: mp3Name,
+            outputFileName: outputFileName,
             previewUrl: `/previews/${previewFileName}`
         });
 

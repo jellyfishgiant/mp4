@@ -243,3 +243,29 @@ h2 {
 .title {
     animation: matrixGlow 2s infinite;
 }
+
+.status-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.download-btn {
+    background: #003300;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'VT323', monospace;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+    background: #004400;
+    box-shadow: 0 0 10px #00ff00;
+    transform: translateY(-1px);
+}
